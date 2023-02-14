@@ -1,19 +1,12 @@
 package by.bzhezinski;
 
-import by.bzhezinski.model.Animal;
-import by.bzhezinski.model.Car;
-import by.bzhezinski.model.Flower;
-import by.bzhezinski.model.House;
-import by.bzhezinski.model.Person;
+import by.bzhezinski.model.*;
 import by.bzhezinski.util.Util;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,6 +28,7 @@ public class Main {
         task13();
         task14();
         task15();
+        task16();
     }
 
 
@@ -193,6 +187,22 @@ public class Main {
                 .mapToLong(f -> f.getPrice() + Math.round(f.getWaterConsumptionPerDay() * 365 * 5 / 1000 * 139))
                 .sum();
         System.out.printf("Total expenses is %.2f $", totalSum / 100.0);
+    }
+
+    private static void task16() throws IOException {
+        List<Department> departments = Util.getDepartment();
+        LocalDate now = LocalDate.now();
+        Map<String, List<Person>> employee;
+        departments.stream().filter(d -> "production".equals(d.getDepartmentType()))
+                .flatMap(d -> d.getPersonList().stream())
+                .filter(person -> {
+                    int age = Period.between(person.getDateOfBirth(), now).getYears();
+                    return (age == 62 && "Male".equals(person.getGender())) || (age == 57 && "Female".equals(person.getGender()));
+                }).sorted(Comparator.comparing(Person::getDateOfBirth)).collect(Collectors.groupingBy(Person::getGender))
+                .forEach((k, v) -> {
+                    System.out.println(k + " , quantity - " + v.size());
+                    v.stream().forEach(System.out::println);
+                });
     }
 
     private static String carForTurkmenistanTest(Car car) {

@@ -1,10 +1,6 @@
 package by.bzhezinski.util;
 
-import by.bzhezinski.model.Animal;
-import by.bzhezinski.model.Car;
-import by.bzhezinski.model.Flower;
-import by.bzhezinski.model.House;
-import by.bzhezinski.model.Person;
+import by.bzhezinski.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,6 +56,20 @@ public class Util {
         );
     }
 
+    public static List<Department> getDepartment() throws IOException {
+        List<Person> personList = getPersons();
+        return List.of(
+                new Department(1, "Shop1", "production", personList.subList(0, 100)),
+                new Department(2, "Shop2", "production", personList.subList(101, 201)),
+                new Department(3, "Shop3", "production", personList.subList(202, 302)),
+                new Department(4, "Shop4", "production", personList.subList(303, 405)),
+                new Department(5, "Shop5", "production", personList.subList(406, 505)),
+                new Department(6, "accounting", "itr", personList.subList(506, 515)),
+                new Department(7, "commercial", "itr", personList.subList(516, 530)),
+                new Department(8, "purchasing", "itr", personList.subList(531, 535)),
+                new Department(9, "directorate", "management", personList.subList(536, 540))
+        );
+    }
     private static ObjectMapper newMapper() {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
